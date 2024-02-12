@@ -1,8 +1,3 @@
-#Autor: Jesus Miguel Camarillo
-#Proyecto: Aguas 2.0
-#Fecha: Abril 2023
-#Descripcion: Programacion Principal
-
 from machine import Timer
 from machine import Pin
 import Weg
