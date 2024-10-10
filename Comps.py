@@ -5,9 +5,50 @@
 
 import struct
 
+
+
+
+
+
+
+#Decimal a Flotante
+def DtoF(valor,exp):
+    mult=1
+    d=0
+    for i in range(exp):
+        mult = mult/2
+        if ((valor>>(exp-1-i)) & 0x01)==1 :
+            d=d+mult
+
+    return d
+
+
+
+
+
+
+
 #Byte a floatante
 def BtoF(byte):
     return struct.unpack('>f', byte)[0]
+
+
+
+
+
+
+
+#Floatante a Byte
+def FtoB(valor):
+    return struct.pack('>f', valor)
+
+
+
+
+
+
+
+
 
 #Entero a bytes
 def NtoB(valor,n_bytes):
@@ -17,10 +58,27 @@ def NtoB(valor,n_bytes):
     
     return bytes(B)
 
+
+
+
+
+
+
+
+
+
 #Bytes a entero
 def BtoN(valor):
     
     return int.from_bytes(valor, "big")
+
+
+
+
+
+
+
+
 
 # Componer un flotante
 def F32com(valor,bufer,signo,bit_en,bit_dec):
@@ -39,13 +97,47 @@ def F32com(valor,bufer,signo,bit_en,bit_dec):
     
     bufer=(bufer<<bit_en)+ent
     bufer=(bufer<<bit_dec)+dec
+    
+    #print(ent)
+    #print(DtoF(dec,bit_dec))
+    
     return bufer
+
+
+
+
+
+
+
+
 
 #Componer Entero 
 def Icom(valor,bufer,bit):
-    ent= valor & ((2**bit)-1)   
-    bufer=(bufer<<bit)+ent    
+    ent= valor & ((2**bit)-1)
+    
+    bufer=(bufer<<bit)+ent
+    #print(ent)
+    
     return bufer
+
+
+
+
+
+
+
+
+#Floatante a Bytes
+def te(valor):
+    
+    return BtoN(FtoB(valor))
+
+
+
+
+
+
+
 
 # Creador de payload
 def mesg(falla,v1,v2,v3,v4,v5,v6,v7,v8):

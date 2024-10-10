@@ -78,7 +78,7 @@ H=0                     #Int Nivel H
 
 #Configuracion inicial del modem de Sigfox
 sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ2)
-##sigfox = Sigfox(mode=Sigfox.FSK, frequency=868000000)
+#sigfox = Sigfox(mode=Sigfox.FSK, frequency=868000000)
 # create a Sigfox socket
 s = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
 # make the socket blocking
@@ -86,6 +86,7 @@ s.setblocking(True)
 
 # configure it as uplink only
 s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
+#s.send('0')
 
 
 
@@ -260,7 +261,7 @@ def envio():
     
     payload=Comps.mesg(fallas(),Pa,Fp,Te,Ic,Q,P,En,H)
     s.send(payload)
-    ##print(hex(Comps.BtoN(payload)))
+    #print(hex(Comps.BtoN(payload)))
     
     
     #se apaga el led 

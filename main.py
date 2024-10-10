@@ -1,3 +1,8 @@
+#Autor: Jesus Miguel Camarillo
+#Proyecto: Aguas 2.0
+#Fecha: Abril 2023
+#Descripcion: Programacion Principal
+
 from machine import Timer
 from machine import Pin
 import Weg
@@ -21,4 +26,4 @@ p_in.callback(Pin.IRQ_FALLING, pin_handler)
 
 
 #periodo de envio de informacion
-a=Timer.Alarm(lambda y: Weg.envio(),s=900, periodic=True)
+a=Timer.Alarm(lambda y: Weg.envio(),s=90, periodic=True)
