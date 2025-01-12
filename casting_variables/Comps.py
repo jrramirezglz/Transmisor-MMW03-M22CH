@@ -2,14 +2,7 @@
 #Proyecto: Aguas 2.0
 #Fecha: Julio 2022
 #Descripcion: Todas las funciones que hacen casting de varibles y la que arma el payload
-
 import struct
-
-
-
-
-
-
 
 #Decimal a Flotante
 def DtoF(valor,exp):
@@ -22,94 +15,37 @@ def DtoF(valor,exp):
 
     return d
 
-
-
-
-
-
-
 #Byte a floatante
 def BtoF(byte):
     return struct.unpack('>f', byte)[0]
 
-
-
-
-
-
-
 #Floatante a Byte
 def FtoB(valor):
     return struct.pack('>f', valor)
-
-
-
-
-
-
-
-
 
 #Entero a bytes
 def NtoB(valor,n_bytes):
     B=[(valor>>((n_bytes-1)*8))&0xFF]
     for i in range (1, n_bytes):
         B.append((valor>>((n_bytes-1-i)*8))&0xFF)
-    
     return bytes(B)
-
-
-
-
-
-
-
-
-
 
 #Bytes a entero
 def BtoN(valor):
-    
     return int.from_bytes(valor, "big")
-
-
-
-
-
-
-
-
-
 # Componer un flotante
 def F32com(valor,bufer,signo,bit_en,bit_dec):
-    
     exp=((valor>>23)&(0xFF))-127
     expn=23-exp
-    
     mantissa=valor & 0x7FFFFF
-    
     ent=((mantissa+(1<<23))>>expn) & ((2**bit_en)-1)
-    
     dec=(mantissa & ((2**expn)-1)) >> (expn-bit_dec)
-    
     if signo==1:
         bufer=(bufer<<1)+(valor>>31)
     
     bufer=(bufer<<bit_en)+ent
     bufer=(bufer<<bit_dec)+dec
-    
-    #print(ent)
-    #print(DtoF(dec,bit_dec))
-    
     return bufer
-
-
-
-
-
-
-
-
 
 #Componer Entero 
 def Icom(valor,bufer,bit):
@@ -120,25 +56,10 @@ def Icom(valor,bufer,bit):
     
     return bufer
 
-
-
-
-
-
-
-
 #Floatante a Bytes
 def te(valor):
     
     return BtoN(FtoB(valor))
-
-
-
-
-
-
-
-
 # Creador de payload
 def mesg(falla,v1,v2,v3,v4,v5,v6,v7,v8):
     

@@ -13,9 +13,9 @@ from Weg import time
 time.sleep(5)
 
 #primer mensaje
-Weg.sync()
-time.sleep(5)
-Weg.envio()
+#Weg.sync()
+#time.sleep(5)
+#Weg.envio()
 
 #boton manual de mensaje
 def pin_handler(arg):
@@ -26,4 +26,4 @@ p_in.callback(Pin.IRQ_FALLING, pin_handler)
 
 
 #periodo de envio de informacion
-a=Timer.Alarm(lambda y: Weg.envio(),s=90, periodic=True)
+a=Timer.Alarm(lambda y: Weg.envio(),s=900, periodic=True)

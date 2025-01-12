@@ -12,24 +12,12 @@ from network import Sigfox
 from machine import ADC
 import pycom
 import socket
-import Modbus
+import medidor_modbus.Modbus as Modbus
 import time
-import Comps
+import casting_variables.Comps as Comps
 
 #Se apaga la funcion que tiene por defecto de parpadeo
 pycom.heartbeat(False)
-
-
-
-
-
-
-
-
-
-
-
-
 
 #Configuracion de los pines analogicos de entrada
 rtc=RTC()
@@ -39,21 +27,8 @@ adc3=ADC()
 presion=(adc.channel(pin="P20", attn=ADC.ATTN_11DB))
 caudal=(adc2.channel(pin="P19", attn=ADC.ATTN_11DB))
 hidro=(adc3.channel(pin="P16", attn=ADC.ATTN_11DB))
-
-
-
-
-
-
-
-
-
-
-
-
 #Se delcaran variables globales
 m22chb=0                #bit indicador de modelo M22CHB (mas avanzado y unico que cambia de registros)
-
 falla_modbus=0          #bit falla de comunicacion modbus
 
 tem=0                   #32 float Temperatura
@@ -65,17 +40,6 @@ Ic=0                    #32 float Corriente Total de las 3 Fases
 Q=0                     #Int Caudal
 P=0                     #Int Presion
 H=0                     #Int Nivel H
-
-
-
-
-
-
-
-
-
-
-
 #Configuracion inicial del modem de Sigfox
 sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ2)
 #sigfox = Sigfox(mode=Sigfox.FSK, frequency=868000000)
@@ -83,12 +47,9 @@ sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ2)
 s = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
 # make the socket blocking
 s.setblocking(True)
-
 # configure it as uplink only
 s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
 #s.send('0')
-
-
 
 def fallas():
     global falla_modbus
@@ -96,8 +57,6 @@ def fallas():
     if falla_modbus==1:
         f=0b0100|f
     return f
-
-
 
 # Primer mensaje de ID Modelo 
 def sync():
@@ -117,8 +76,6 @@ def sync():
         i==0b0001
     else:
         i=0                                                 #ID Modelo Desconocido
-
-
     #envio 
     i=(fallas()<<4)|i
     i=Comps.NtoB(i,1)
@@ -126,13 +83,6 @@ def sync():
 
     #se apaga el led 
     pycom.rgbled(0x00)
-
-
-
-
-
-
-
 
 # Funcion de escaneo de medidores
 def scan():
@@ -152,9 +102,7 @@ def scan():
     global P #Presion
     global H #Carga dinamica
 
-
 #pedir lectura de regstros en el analizador de energia
-
 
     #POTENCIA ACTIVA
     i=Modbus.readReg(1,68,2)
@@ -166,23 +114,19 @@ def scan():
 
     Pa=Comps.BtoF(Pa)
     Pa=int(round(float(Pa)/5))
-    
-
     #ENERGIA ACTIVA
     i=Modbus.readReg(1,470,2)
     if i== False:
         falla_modbus=1
         En=0
     else:
-        En=Comps.BtoN(i)
-        
+        En=Comps.BtoN(i)     
     if En >= 0xFFFF:
         Modbus.writeReg(1, 5000, 2, 2222)
         Modbus.writeReg(1, 470, 2, En-0xFFFF)
         Modbus.writeReg(1, 2000, 2, 1)
         time.sleep(5)
     
-
     #FACTOR DE POTENCIA
     i=Modbus.readReg(1,66,2)
     if i== False:
@@ -260,10 +204,7 @@ def envio():
     pycom.rgbled(0xFF00)
     
     payload=Comps.mesg(fallas(),Pa,Fp,Te,Ic,Q,P,En,H)
-    s.send(payload)
     #print(hex(Comps.BtoN(payload)))
-    
-    
     #se apaga el led 
     pycom.rgbled(0x00)
     
