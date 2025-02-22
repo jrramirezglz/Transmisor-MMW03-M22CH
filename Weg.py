@@ -1,4 +1,3 @@
-from machine import RTC
 from network import Sigfox
 from machine import ADC
 import pycom
@@ -7,7 +6,6 @@ import socket
 pycom.heartbeat(False)
 
 #Configuracion de los pines analogicos de entrada
-rtc=RTC()
 adc=ADC()
 adc2=ADC()
 adc3=ADC()
