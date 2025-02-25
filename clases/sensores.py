@@ -7,7 +7,6 @@ class Sensores:
         self._puerto = puerto
         self._nombre = nombre
         self._medicion = 0
-        self._dato = 0
         self._sensor = None
     
     def configurar_sensor(self):
@@ -17,16 +16,21 @@ class Sensores:
 
     def leer_sensor(self):
         self._medicion = self._sensor.voltage()
-        return self._medicion
-
-    def convertir_medicion(self):
         if(self._medicion<400):
             self._medicion=400
         if(self._medicion>2000):
             self._medicion=2000
-        self._dato=(self._medicion-400)
-        self._dato=int(round(self._dato))
-        return self._dato
+        dato = self._medicion
+        if self._nombre == "Presion":
+            P=(self._medicion-400)/3.125
+        elif self._nombre == "Hidroestatico":
+            P=((((self._medicion - 400)*10.2)/1600)*10)
+        elif self._nombre == "Caudal":
+            P=(self._medicion - 400)      
+        else :
+            P = 0
+        dato=int(round(P))
+        return  self._medicion, dato
 
     def informacionDelSensor(self):
         print(self._tipo)
