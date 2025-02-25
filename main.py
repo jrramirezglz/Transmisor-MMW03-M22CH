@@ -10,7 +10,8 @@ def inicializacion():
     sensor2 = init.inicializarSensores("ADC","P19","Caudal") 
     sensor3 = init.inicializarSensores("ADC","P16","Hidroestatico")
     comunicacion = init.inicializarComunicacion()
-    return sensor1,sensor2,sensor3,comunicacion
+    ledIndicador = init.inicializarLeds()
+    return sensor1,sensor2,sensor3,comunicacion,ledIndicador
 
 def lecturaSensores():
     lecturaPresion, datoPresion  = presion.leer_sensor()
@@ -30,7 +31,8 @@ def analisisDatos():
     lecturaSensores()
     wireless.send_message(lecturaSensores())
 
-presion, caudal, hidro, wireless = inicializacion()
-
+presion, caudal, hidro, wireless, led= inicializacion()
+led.led_toggle("GREEN",5)
+analisisDatos()
 #periodo de envio de informacion
-a=Timer.Alarm(lambda y: analisisDatos(),s=60, periodic=True)
+a=Timer.Alarm(lambda y: analisisDatos(),s=3600, periodic=True)

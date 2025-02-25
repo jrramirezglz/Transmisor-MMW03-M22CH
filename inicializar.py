@@ -12,3 +12,7 @@ def inicializarSensores(tipo,puerto,nombre):
 def inicializarComunicacion():
     com = Conectividad()
     return com
+
+def inicializarLeds():
+    led = Led()
+    return led
