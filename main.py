@@ -32,7 +32,10 @@ def analisisDatos():
     wireless.send_message(lecturaSensores())
 
 presion, caudal, hidro, wireless, led= inicializacion()
-led.led_toggle("GREEN",5)
-analisisDatos()
+i = 0
+for  i in range(3):
+    led.led_toggle("GREEN",5)
+    analisisDatos()
+    time.sleep(30)
 #periodo de envio de informacion
-a=Timer.Alarm(lambda y: analisisDatos(),s=3600, periodic=True)
+a=Timer.Alarm(lambda y: analisisDatos(),s=600, periodic=True)
